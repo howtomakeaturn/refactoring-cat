@@ -2,6 +2,7 @@
 import os
 import fileinput
 import time
+import datetime
 import curses
 
 from tempfile import mkstemp
@@ -60,6 +61,11 @@ def find(target_str, excluded_path):
 def signal_handler(signal, frame):
     curses.endwin()
     sys.exit(0)
+    
+def current_datetime():
+    ts = time.time()
+    st = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
+    return st
 
 def main(arg2, arg3):
     signal.signal(signal.SIGINT, signal_handler)        
@@ -68,6 +74,10 @@ def main(arg2, arg3):
     while (True):
         line_index = 0
         data = find(arg2, arg3)
+
+        stdscr.addstr(line_index, 0, 'Current time: ' + current_datetime(), curses.A_REVERSE)
+        line_index += 1
+
         for file in data:            
             stdscr.addstr(line_index, 0, 'File: ' + file['path'].replace(current_path + '/', '') + ': ' + str(len(file['lines'])))
             line_index += 1
