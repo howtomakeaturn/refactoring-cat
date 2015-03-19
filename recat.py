@@ -9,6 +9,8 @@ from shutil import move
 from os import remove, close
 
 import sys
+import signal
+
 from termcolor import colored, cprint
 
 def file_contain_str(file_path, pattern):
@@ -55,8 +57,14 @@ def find(target_str, excluded_path):
         cprint('No file found.', 'grey', 'on_white')
     '''
 
+def signal_handler(signal, frame):
+    curses.endwin()
+    sys.exit(0)
+
 def main(arg1, arg2, arg3):
     if (arg1 == 'find'):
+        signal.signal(signal.SIGINT, signal_handler)        
+
         stdscr = curses.initscr()
         while (True):
             line_index = 0
