@@ -62,7 +62,7 @@ def main(arg1, arg2, arg3):
             line_index = 0
             data = find(arg2, arg3)
             for file in data:            
-                stdscr.addstr(line_index, 0, 'File: ' + file['path'].replace(current_path + '/', ''))
+                stdscr.addstr(line_index, 0, 'File: ' + file['path'].replace(current_path + '/', '') + ': ' + str(len(file['lines'])))
                 line_index += 1
                 '''
                 for line in file['lines']:
