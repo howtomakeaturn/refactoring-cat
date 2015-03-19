@@ -1,6 +1,8 @@
 #!/usr/bin/env python2.7
 import os
 import fileinput
+import time
+import curses
 
 from tempfile import mkstemp
 from shutil import move
@@ -27,7 +29,6 @@ def lines_in_file(file_path, pattern):
     return lines
 
 def find(target_str, excluded_path):
-    current_path = os.getcwd()
 
     files_to_search = []
 
@@ -43,6 +44,8 @@ def find(target_str, excluded_path):
         if (file_contain_str(file, target_str)):
             files_found.append({'path': file, 'lines': lines_in_file(file, target_str)})
 
+    return files_found
+    '''
     if (len(files_found)):
         for file in files_found:
             cprint('File: ' + file['path'].replace(current_path + '/', ''), 'grey', 'on_white')
@@ -50,11 +53,28 @@ def find(target_str, excluded_path):
                 cprint(line.replace('\n', ''), 'green')                
     else:
         cprint('No file found.', 'grey', 'on_white')
+    '''
 
 def main(arg1, arg2, arg3):
     if (arg1 == 'find'):
-        os.system('cls' if os.name == 'nt' else 'clear')
-        find(arg2, arg3)
+        stdscr = curses.initscr()
+        while (True):
+            line_index = 0
+            data = find(arg2, arg3)
+            for file in data:            
+                stdscr.addstr(line_index, 0, 'File: ' + file['path'].replace(current_path + '/', ''))
+                line_index += 1
+                '''
+                for line in file['lines']:
+                    stdscr.addstr(line_index, 0, line)
+                    line_index += 1
+                '''
+            
+            stdscr.refresh()
+            time.sleep(1)                
+
+
+current_path = os.getcwd()
 
 if __name__=='__main__':
     sys.exit(main(sys.argv[1], sys.argv[2], sys.argv[3]))
