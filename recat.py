@@ -61,28 +61,27 @@ def signal_handler(signal, frame):
     curses.endwin()
     sys.exit(0)
 
-def main(arg1, arg2, arg3):
-    if (arg1 == 'find'):
-        signal.signal(signal.SIGINT, signal_handler)        
+def main(arg2, arg3):
+    signal.signal(signal.SIGINT, signal_handler)        
 
-        stdscr = curses.initscr()
-        while (True):
-            line_index = 0
-            data = find(arg2, arg3)
-            for file in data:            
-                stdscr.addstr(line_index, 0, 'File: ' + file['path'].replace(current_path + '/', '') + ': ' + str(len(file['lines'])))
+    stdscr = curses.initscr()
+    while (True):
+        line_index = 0
+        data = find(arg2, arg3)
+        for file in data:            
+            stdscr.addstr(line_index, 0, 'File: ' + file['path'].replace(current_path + '/', '') + ': ' + str(len(file['lines'])))
+            line_index += 1
+            '''
+            for line in file['lines']:
+                stdscr.addstr(line_index, 0, line)
                 line_index += 1
-                '''
-                for line in file['lines']:
-                    stdscr.addstr(line_index, 0, line)
-                    line_index += 1
-                '''
-            
-            stdscr.refresh()
-            time.sleep(1)                
+            '''
+        
+        stdscr.refresh()
+        time.sleep(1)                
 
 
 current_path = os.getcwd()
 
 if __name__=='__main__':
-    sys.exit(main(sys.argv[1], sys.argv[2], sys.argv[3]))
+    sys.exit(main(sys.argv[1], sys.argv[2]))
