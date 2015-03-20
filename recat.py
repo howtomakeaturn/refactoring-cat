@@ -94,4 +94,9 @@ def main(arg2, arg3):
 current_path = os.getcwd()
 
 if __name__=='__main__':
-    sys.exit(main(sys.argv[1], sys.argv[2]))
+    try:
+        sys.exit(main(sys.argv[1], sys.argv[2]))
+    except Exception as e:
+        print e
+        curses.endwin()
+        sys.exit(0)
